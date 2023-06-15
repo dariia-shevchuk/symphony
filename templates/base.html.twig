@@ -2,21 +2,41 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Test Application{% endblock %}</title>
+    <title>{% block title %}Tracker Application{% endblock %}</title>
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet"/>
+    <script src="{{ asset('js/main.js') }}"></script>
 </head>
 <body>
-<div id="sidebar">
+<div id="sidebar" class="nav">
     {% block sidebar %}
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/products">List issues</a></li>
-            <li><a href="/product/1">Add Issue</a></li>
+        <ul class="root-nav">
+            <li><a href="{{ path('home') }}">Home</a></li>
+
+            {% if app.user %}
+                <li><a href="{{ path('issues') }}">My Issues</a></li>
+                <li><a href="{{ path('new_issue') }}">New Issue</a></li>
+                {%  if is_granted('ROLE_ADMIN') %}
+                    <li><a href="{{ path('new_category') }}">Add category</a></li>
+                {% endif %}
+                <li><a href="{{ path('app_logout') }}">Logout</a></li>
+            {% else %}
+                <li><a href="{{ path('app_login') }}">Login</a></li>
+                <li><a href="{{ path('app_register') }}">Register</a></li>
+            {% endif %}
+
             {% block addons %}{% endblock %}
         </ul>
     {% endblock %}
 </div>
 
 <div id="content">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
     {% block body %}{% endblock %}
 </div>
 </body>

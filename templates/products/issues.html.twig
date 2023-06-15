@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>
+        Category listing
+    </h1>
+    <ul>
+        {% for issue in issues %}
+            <li>{{ issue.name }} - {{ issue.shortDesctiption }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

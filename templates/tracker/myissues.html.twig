@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>
+        Issue list:
+    </h1>
+
+    {% if trackerIssues %}
+        <table>
+            <tr>
+                <th>Tytuł</th>
+                <th>Status</th>
+                <th>Data utworzenia</th>
+                {%  if is_granted('ROLE_ADMIN') %}
+                    <th>Email</th>
+                {%  endif %}
+                <th>Akcje</th>
+            </tr>
+            {% for issue in trackerIssues %}
+                <tr>
+                    <td>{{ issue.title }}</td>
+                    <td>{{ issueStatuses[issue.status] }}</td>
+                    <td>{{ issue.createdAt.format('Y-m-d H:i:s') }}</td>
+                    {%  if is_granted('ROLE_ADMIN') %}
+                        <td>{{ issue.contactEmail }}</td>
+                    {%  endif %}
+                    <td>
+                        <a href="{{ path('issue', {'issueId': issue.id }) }}">Zobacz</a>
+                        {%  if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('issueManage', {'issueId': issue.id }) }}">Zarządzaj</a>
+                        {%  endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        </table>
+    {% else %}
+
+        <div class="message empty-response">
+            <p>Nie masz żadnych zgłoszeń. Możesz dodać zgłoszenie, korzystające z
+                <a href="{{ path('new_issue') }}">tego</a> linku</p>
+        </div>
+
+    {% endif %}
+{% endblock %}
