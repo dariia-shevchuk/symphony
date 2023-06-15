@@ -2,5 +2,5 @@
 Symfony zaliczenie
 # Start
 symfony server:start
-/////Database:
+# Database:
 php bin/console doctrine:database:create
